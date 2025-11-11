@@ -57,7 +57,9 @@ async function fetchNews(query) {
     apiKey: API_KEY
   });
 
-  const endpoint = `${BASE_URL}/everything?${params.toString()}`;
+  const endpoint = "https://api.allorigins.win/raw?url=" +
+  encodeURIComponent(`${BASE_URL}/everything?${params.toString()}`);
+= `${BASE_URL}/everything?${params.toString()}`;
 
   try {
     const res = await fetch(endpoint);
