@@ -1,5 +1,6 @@
-// Pakai API key yang kamu berikan
+// Ganti dengan API key kamu
 const API_KEY = "c1f6796c85574347b91667bf33473463";
+// Endpoint "everything" agar bebas query kategori custom
 const BASE_URL = "https://newsapi.org/v2";
 
 const cardsContainer = document.getElementById("cards-container");
