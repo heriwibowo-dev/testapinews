@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Roboto:wght@500&display=swap");
+
+* { padding: 0; margin: 0; box-sizing: border-box; }
+
+:root { --accent-color: #14a37f; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #c3c3c3;
+}
+
+p { font-family: "Roboto", sans-serif; opacity: .8; line-height: 1.4rem; }
+a { text-decoration: none; }
+ul { list-style: none; }
+
+.flex { display: flex; align-items: center; }
+
+.container {
+  max-width: 1180px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+nav {
+  background-color: #484e52;
+  color: white;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 99;
+}
+
+.main-nav { justify-content: space-between; padding-block: 8px; }
+.nav-links ul { gap: 16px; }
+.hover-link { cursor: pointer; }
+
+.nav-item.active { color: var(--accent-color); text-decoration: underline; }
+
+.search-bar { height: 32px; gap: 8px; }
+
+.news-input {
+  width: 220px; height: 100%;
+  padding-inline: 12px;
+  border-radius: 4px;
+  border: 2px solid #bbd0e2;
+  font-family: "Roboto", sans-serif;
+  outline: none;
+}
+
+.search-button {
+  background-color: #208c5b; color: white;
+  padding: 8px 24px; border: none; border-radius: 4px;
+  cursor: pointer; font-family: "Roboto", sans-serif;
+}
+.search-button:hover { filter: brightness(0.95); }
+
+main { padding-block: 20px; margin-top: 80px; }
+
+.cards-container {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  align-items: start;
+  padding: 10px 0 40px;
+}
+
+.card {
+  width: 360px; min-height: 400px;
+  box-shadow: 0 0 4px #d4ecff;
+  border-radius: 4px; cursor: pointer; background-color: #fff;
+  overflow: hidden; transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: 1px 1px 8px #d4ecff; background-color: #f9fdff;
+  transform: translateY(-2px);
+}
+
+.card-header img { width: 100%; height: 180px; object-fit: cover; }
+.card-content { padding: 12px; }
+.news-source { margin-block: 12px; }
+.hover-link:hover { color: #b9b9b9; text-decoration: underline; }
+
+.message {
+  margin: 16px 0; padding: 12px 14px;
+  background: #fff2cc; border: 1px solid #ffe08a;
+  border-radius: 6px; color: #5a4b00;
+}
