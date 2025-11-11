@@ -9,7 +9,7 @@ const searchButton = document.getElementById("search-button");
 const searchText = document.getElementById("search-text");
 const messageBox = document.getElementById("message");
 
-// Mapping nav -> query
+// Mapping nav -> query yang lebih spesifik
 const NAV_QUERIES = {
   finance: "(finance OR business) AND economy",
   sports: "sports",
@@ -22,8 +22,9 @@ const NAV_QUERIES = {
 
 let curSelectedNav = null;
 
-// Default load
+// Init: muat berita populer Indonesia sebagai default
 window.addEventListener("load", () => {
+  // default query yang relevan untuk pengguna di Indonesia
   fetchNews("Indonesia");
   setActiveNav(null);
 });
@@ -47,22 +48,28 @@ async function fetchNews(query) {
   clearMessage();
   cardsContainer.innerHTML = "";
 
+  // Merapikan query
+  const q = typeof query === "string" ? query : "";
   const params = new URLSearchParams({
-    q: query || "",
+    q,
     sortBy: "publishedAt",
     pageSize: "24",
     apiKey: API_KEY
-    // language: "id" // aktifkan jika ingin hanya sumber berbahasa Indonesia
   });
 
   const endpoint = `${BASE_URL}/everything?${params.toString()}`;
 
   try {
     const res = await fetch(endpoint);
-    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    if (!res.ok) {
+      // NewsAPI sering blok request client-side pada plan tertentu
+      throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    }
     const data = await res.json();
 
-    if (data.status !== "ok") throw new Error(data.message || "Request gagal");
+    if (data.status !== "ok") {
+      throw new Error(data.message || "Request gagal");
+    }
 
     const articles = Array.isArray(data.articles) ? data.articles : [];
     if (articles.length === 0) {
@@ -73,7 +80,7 @@ async function fetchNews(query) {
     bindData(articles);
   } catch (err) {
     console.error(err);
-    showMessage("Gagal memuat berita. Jika ini terjadi, kemungkinan diblokir CORS oleh NewsAPI.");
+    showMessage("Gagal memuat berita. Cek API key, kuota, atau kebijakan CORS.");
   }
 }
 
@@ -93,7 +100,10 @@ function fillDataInCard(cardClone, article) {
   const descEl = cardClone.querySelector(".news-desc");
   const cardRoot = cardClone.querySelector(".card");
 
-  imgEl.src = article.urlToImage || "https://placehold.co/800x400?text=No+Image";
+  const imgSrc =
+    article.urlToImage ||
+    "https://placehold.co/800x400?text=No+Image";
+  imgEl.src = imgSrc;
   imgEl.alt = article.title || "news-image";
 
   titleEl.textContent = article.title || "Tanpa judul";
@@ -107,30 +117,34 @@ function fillDataInCard(cardClone, article) {
   sourceEl.textContent = `${sourceName} · ${published}`;
 
   cardRoot.addEventListener("click", () => {
-    if (article.url) {
+    try {
       const win = window.open(article.url, "_blank", "noopener,noreferrer");
       if (win) win.opener = null;
+    } catch (_) {
+      // no-op
     }
   });
 }
 
-// Nav click
+// Event nav
 document.getElementById("nav-list").addEventListener("click", (e) => {
   const item = e.target.closest(".nav-item");
   if (!item) return;
+
   const key = item.dataset.query;
   const mapped = NAV_QUERIES[key] || key;
   fetchNews(mapped);
   setActiveNav(item);
 });
 
-// Search
+// Event search
 searchButton.addEventListener("click", () => {
   const q = searchText.value.trim();
   if (!q) return;
   fetchNews(q);
   setActiveNav(null);
 });
+
 searchText.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     const q = searchText.value.trim();
